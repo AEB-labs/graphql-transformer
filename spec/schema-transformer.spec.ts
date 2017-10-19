@@ -1,8 +1,9 @@
 import {
+    buildASTSchema,
     GraphQLFieldConfigMap, GraphQLID, GraphQLInt, GraphQLInterfaceType, GraphQLObjectType, GraphQLObjectTypeConfig,
     GraphQLSchema,
     GraphQLString,
-    GraphQLUnionType
+    GraphQLUnionType, parse
 } from 'graphql';
 import {
     FieldsTransformationContext, GraphQLNamedFieldConfig, transformSchema
@@ -187,6 +188,23 @@ describe('schema-transformer', () => {
         expect(reflexiveTypeRes.name).toBe('MyType2');
         expect(reflexiveTypeRes.getFields()['self']).not.toBeDefined();
         expect(reflexiveTypeRes.getFields()['name']).toBeDefined();
+    });
+
+    it('keeps ast nodes', () => {
+        const schema = buildASTSchema(parse(`schema { query: Query } type Query { echo(in: String): String }`));
+        expect((schema.getType('Query') as any).getFields()['echo'].astNode).toBeDefined();
+        const transformed = transformSchema(schema, {
+            transformField(config) {
+                if (config.name == 'echo') {
+                    return {
+                        ...config,
+                        name: 'echo2'
+                    }
+                }
+                return config;
+            }
+        });
+        expect((transformed.getType('Query') as any).getFields()['echo2'].astNode).toBeDefined();
     });
 
     it('removes unused types', () => {

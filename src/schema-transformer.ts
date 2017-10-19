@@ -319,7 +319,8 @@ class Transformer {
             description: type.description,
             serialize: type.serialize.bind(type),
             parseLiteral: type.parseLiteral.bind(type),
-            parseValue: type.parseValue.bind(type)
+            parseValue: type.parseValue.bind(type),
+            astNode: type.astNode
         };
         if (transformer.transformScalarType) {
             config = transformer.transformScalarType(config, {...this.transformationContext, oldType: type});
@@ -337,7 +338,8 @@ class Transformer {
                 newOuterType: this.mapType(type)
             }, transformer),
             interfaces: type.getInterfaces().map(iface => this.mapType(iface)),
-            isTypeOf: type.isTypeOf
+            isTypeOf: type.isTypeOf,
+            astNode: type.astNode
         };
         if (transformer.transformObjectType) {
             config = transformer.transformObjectType(config, {...this.transformationContext, oldType: type});
@@ -350,11 +352,11 @@ class Transformer {
             name: type.name,
             description: type.description,
             resolveType: this.transformTypeResolver(type.resolveType, transformer),
-
             fields: () => this.transformFields(type.getFields(), {
                 oldOuterType: type,
                 newOuterType: this.mapType(type)
-            }, transformer)
+            }, transformer),
+            astNode: type.astNode
         };
         if (transformer.transformInterfaceType) {
             config = transformer.transformInterfaceType(config, {...this.transformationContext, oldType: type});
@@ -376,7 +378,8 @@ class Transformer {
                 deprecationReason: originalField.deprecationReason,
                 type: this.mapType(originalField.type),
                 args: this.transformArguments(originalField.args),
-                resolve: originalField.resolve
+                resolve: originalField.resolve,
+                astNode: originalField.astNode
             };
             if (transformer.transformField) {
                 fieldConfig = transformer.transformField(fieldConfig, {
@@ -408,7 +411,8 @@ class Transformer {
             args[arg.name] = {
                 description: arg.description,
                 type: this.mapType(arg.type),
-                defaultValue: arg.defaultValue
+                defaultValue: arg.defaultValue,
+                astNode: arg.astNode
             };
         }
         return args;
@@ -424,7 +428,8 @@ class Transformer {
                     name: fieldName,
                     description: originalField.description,
                     defaultValue: originalField.defaultValue,
-                    type: this.mapType(originalField.type)
+                    type: this.mapType(originalField.type),
+                    astNode: originalField.astNode
                 };
                 if (transformer.transformInputField) {
                     fieldConfig = transformer.transformInputField(fieldConfig, {
@@ -445,7 +450,8 @@ class Transformer {
         let config: GraphQLInputObjectTypeConfig = {
             name: type.name,
             description: type.description,
-            fields: getFields
+            fields: getFields,
+            astNode: type.astNode
         };
         if (transformer.transformInputObjectType) {
             config = transformer.transformInputObjectType(config, {...this.transformationContext, oldType: type});
@@ -459,14 +465,16 @@ class Transformer {
             values[originalValue.name] = {
                 description: originalValue.description,
                 value: originalValue.value,
-                deprecationReason: originalValue.deprecationReason
+                deprecationReason: originalValue.deprecationReason,
+                astNode: originalValue.astNode
             };
         }
 
         let config: GraphQLEnumTypeConfig = {
             name: type.name,
             description: type.description,
-            values
+            values,
+            astNode: type.astNode
         };
         if (transformer.transformEnumType) {
             config = transformer.transformEnumType(config, {...this.transformationContext, oldType: type});
@@ -479,7 +487,8 @@ class Transformer {
             name: type.name,
             description: type.description,
             types: type.getTypes().map(optionType => this.mapType(optionType)),
-            resolveType: this.transformTypeResolver(type.resolveType, transformer)
+            resolveType: this.transformTypeResolver(type.resolveType, transformer),
+            astNode: type.astNode
         };
         if (transformer.transformUnionType) {
             config = transformer.transformUnionType(config, {...this.transformationContext, oldType: type});
@@ -492,7 +501,8 @@ class Transformer {
             name: directive.name,
             description: directive.description,
             locations: directive.locations,
-            args: this.transformArguments(directive.args)
+            args: this.transformArguments(directive.args),
+            astNode: directive.astNode
         };
         if (transformer.transformDirective) {
             config = transformer.transformDirective(config, {...this.transformationContext, oldDirective: directive});
