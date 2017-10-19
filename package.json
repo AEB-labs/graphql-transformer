@@ -4,7 +4,9 @@
   "description": "transform GraphQL schemas with simple mapping functions",
   "main": "dist/index.js",
   "scripts": {
-    "test": "graphql-transformer-test.js"
+    "build": "rimraf dist && tsc && dependency-check ./package.json",
+    "prepublish": "npm run build",
+    "test": "node graphql-transformer-test.js"
   },
   "repository": {
     "type": "git",
