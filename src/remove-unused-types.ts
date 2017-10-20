@@ -69,6 +69,7 @@ function filterUsableInterfaceImplementations(candidates: GraphQLObjectType[], r
         }
         // we might have introduced some new fields that make use of interfaces which need to be added to reachableInterfaces
         const newInterfaces = findAllReachableInterfaces(newImplementations);
+        hasFoundNewInterfaces = false;
         for (const newlyFoundInterface of Array.from(newInterfaces)) {
             if (!reachableInterfaces.has(newlyFoundInterface)) {
                 // found some new interfaces, so trigger a new round
