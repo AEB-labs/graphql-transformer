@@ -1,4 +1,6 @@
-import { GraphQLInterfaceType, GraphQLObjectType, GraphQLSchema, GraphQLType, GraphQLUnionType } from 'graphql';
+import {
+    getNamedType, GraphQLInterfaceType, GraphQLObjectType, GraphQLSchema, GraphQLType, GraphQLUnionType
+} from 'graphql';
 import { compact, objectValues } from './utils';
 
 export function removeUnusedTypesFromSchema(schema: GraphQLSchema): GraphQLSchema {
@@ -21,6 +23,8 @@ function findAllReachableInterfaces(types: GraphQLObjectType[]): Set<GraphQLInte
     const interfaces = new Set<GraphQLInterfaceType>();
 
     function visitType(type: GraphQLType) {
+        type = getNamedType(type);
+
         if (visitedTypes.has(type)) {
             return;
         }

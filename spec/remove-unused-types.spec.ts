@@ -1,6 +1,8 @@
-import { GraphQLID, GraphQLInterfaceType, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString } from 'graphql';
-import { transformSchema } from '../src/schema-transformer';
+import {
+    buildASTSchema, GraphQLID, GraphQLInterfaceType, GraphQLList, GraphQLObjectType, GraphQLSchema, GraphQLString, parse
+} from 'graphql';
 import { removeUnusedTypesFromSchema } from '../src/remove-unused-types';
+import gql from 'graphql-tag';
 
 describe('remove-unused-types', () => {
     it('removes unused types', () => {
@@ -71,6 +73,46 @@ describe('remove-unused-types', () => {
         });
 
         expect(schema.getTypeMap()['Impl']).toBeDefined(); // sanity check that GraphQL does not remove this
+        const condensedSchema = removeUnusedTypesFromSchema(schema);
+        expect(condensedSchema.getTypeMap()['Impl']).toBeDefined();
+    });
+
+    it('keeps interface implementations if they are still in use in list types', () => {
+        const schema = buildASTSchema(gql`
+            schema {
+                query: Query
+            }
+            interface Interface {
+                test: ID
+            }
+            type Query {
+                hello: [Interface]
+            }
+            type Impl implements Interface {
+                test: ID
+            }
+        `);
+
+        const condensedSchema = removeUnusedTypesFromSchema(schema);
+        expect(condensedSchema.getTypeMap()['Impl']).toBeDefined();
+    });
+
+    it('keeps interface implementations if they are still in use in non-null types', () => {
+        const schema = buildASTSchema(gql`
+            schema {
+                query: Query
+            }
+            interface Interface {
+                test: ID
+            }
+            type Query {
+                hello: Interface!
+            }
+            type Impl implements Interface {
+                test: ID
+            }
+        `);
+
         const condensedSchema = removeUnusedTypesFromSchema(schema);
         expect(condensedSchema.getTypeMap()['Impl']).toBeDefined();
     });
