@@ -1,4 +1,6 @@
-import { buildASTSchema } from 'graphql';
+import {
+    buildASTSchema, GraphQLDirective, GraphQLID, GraphQLInputObjectType, GraphQLObjectType, GraphQLSchema, GraphQLString
+} from 'graphql';
 import { removeUnusedTypesFromSchema } from '../src/remove-unused-types';
 import gql from 'graphql-tag';
 
@@ -132,5 +134,53 @@ describe('remove-unused-types', () => {
 
         const condensedSchema = removeUnusedTypesFromSchema(schema);
         expect(condensedSchema.getTypeMap()['Impl2']).toBeDefined();
+    })
+
+    it('keeps interface implementations if they are still used indirectly through impl fields', () => {
+        const schema = buildASTSchema(gql`
+            schema {
+                query: Query
+            }
+            interface Interface1 {
+                test: ID
+            }
+            interface Interface2 {
+                test: ID
+            }
+            type Query {
+                hello: Interface1
+            }
+            type Impl1 implements Interface1 {
+                test: ID
+                otherField: Interface2
+            }
+            type Impl2 implements Interface2 {
+                test: ID
+            }
+        `);
+
+        const condensedSchema = removeUnusedTypesFromSchema(schema);
+        expect(condensedSchema.getTypeMap()['Impl2']).toBeDefined();
+    });
+
+    it('keeps directives and their input types', () => {
+        const schema = buildASTSchema(gql`
+            schema {
+                query: Query
+            }
+            type Query {
+                hello: ID
+            }
+            input DirInput {
+                field: String
+            }
+            directive @dir(arg: DirInput) on OBJECT
+        `);
+
+        const condensedSchema = removeUnusedTypesFromSchema(schema);
+        expect(condensedSchema.getDirective('dir')).toBeDefined('@dir');
+        const type = condensedSchema.getDirective('dir').args[0].type;
+        expect(type).toBeDefined('@dir.arg[[type]]');
+        expect(condensedSchema.getTypeMap()['DirInput']).toBeDefined('DirInput');
     });
 });
