@@ -1,6 +1,7 @@
 import {
     buildASTSchema,
     GraphQLFieldConfigMap, GraphQLID, GraphQLInt, GraphQLInterfaceType, GraphQLObjectType, GraphQLObjectTypeConfig,
+    GraphQLScalarType,
     GraphQLSchema,
     GraphQLString,
     GraphQLUnionType, parse
@@ -252,5 +253,49 @@ describe('schema-transformer', () => {
             }
         });
         expect(transformedSchema.getTypeMap()['Unused']).toBeUndefined();
+    });
+
+    it('removes unused types without causing collisions with new types of same name', () => {
+        const myType = new GraphQLObjectType({
+            name: 'MyType',
+            fields: {
+                field: {
+                    type: GraphQLInt
+                }
+            }
+        });
+
+        const myTypeReplacement = new GraphQLObjectType({
+            name: 'MyType',
+            fields: {
+                field: {
+                    type: GraphQLInt
+                }
+            }
+        });
+
+        const schema = new GraphQLSchema({
+            query: new GraphQLObjectType({
+                name: 'Query',
+                fields: {
+                    hello: {
+                        type: myType
+                    }
+                }
+            })
+        });
+
+        const transformedSchema = transformSchema(schema, {
+            transformField(config) {
+                if (config.name == 'hello') {
+                    return {
+                        ...config,
+                        type: myTypeReplacement
+                    }
+                }
+                return config;
+            }
+        });
+        expect(transformedSchema.getTypeMap()['MyType']).toBe(myTypeReplacement);
     });
 });

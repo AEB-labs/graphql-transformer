@@ -57,7 +57,7 @@ function findAllReachableInterfaces(types: GraphQLObjectType[]): Set<GraphQLInte
  * @param candidates the types which are filtered
  * @return the object types that are usable
  */
-function filterUsableInterfaceImplementations(candidates: GraphQLObjectType[], rootTypes: GraphQLObjectType[]): GraphQLObjectType[] {
+export function filterUsableInterfaceImplementations(candidates: GraphQLObjectType[], rootTypes: GraphQLObjectType[]): GraphQLObjectType[] {
     const reachableInterfaces = findAllReachableInterfaces(rootTypes);
     const implementations = new Set<GraphQLObjectType>();
     let hasFoundNewInterfaces = false;
