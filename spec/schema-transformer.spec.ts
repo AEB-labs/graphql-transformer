@@ -10,6 +10,8 @@ import {
     FieldsTransformationContext, GraphQLNamedFieldConfig, transformSchema
 } from '../src/schema-transformer';
 import { walkFields } from '../src/schema-utils';
+import gql from 'graphql-tag';
+import { removeUnusedTypesFromSchema } from '../src/remove-unused-types';
 
 describe('schema-transformer', () => {
     it('can copy types', () => {
@@ -297,5 +299,40 @@ describe('schema-transformer', () => {
             }
         });
         expect(transformedSchema.getTypeMap()['MyType']).toBe(myTypeReplacement);
+    });
+
+    it('keeps interface implementations if they are still used indirectly', () => {
+        const schema = buildASTSchema(gql`
+            schema {
+                query: Query
+            }
+            interface Interface {
+                test: ID
+            }
+            interface WrappingInterface {
+                test: Interface
+            }
+            type Query {
+                hello: WrappingInterface
+            }
+            type Impl implements Interface {
+                test: ID
+            }
+        `);
+
+        const condensedSchema = transformSchema(schema, {
+            transformFields(config, context) {
+                if (context.oldOuterType.name == 'Query') {
+                    return {
+                        ...config,
+                        newField: {
+                            type: GraphQLInt
+                        }
+                    }
+                }
+                return config;
+            }
+        });
+        expect(condensedSchema.getTypeMap()['Impl']).toBeDefined();
     });
 });

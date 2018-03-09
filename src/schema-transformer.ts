@@ -224,20 +224,17 @@ class Transformer {
         const mutation = findNewTypeMaybe(schema.getMutationType());
         const subscription = findNewTypeMaybe(schema.getSubscriptionType());
         const rootTypes = compact([ query, mutation, subscription ]);
-        const objectTypes = objectValues(schema.getTypeMap()).filter(type => type instanceof GraphQLObjectType) as GraphQLObjectType[];
+        const objectTypes = objectValues(this.typeMap).filter(type => type instanceof GraphQLObjectType) as GraphQLObjectType[];
         // filter unused types before GraphQLSchema construction to avoid type collisions with unused types
         const requiredObjectTypes = filterUsableInterfaceImplementations(objectTypes, rootTypes);
 
-        const newSchema = new GraphQLSchema({
+        return new GraphQLSchema({
             directives,
             query,
             mutation,
             subscription,
             types: requiredObjectTypes
         });
-
-        // we might have dropped some fields, so remove types we no longer use
-        return removeUnusedTypesFromSchema(newSchema);
     }
 
     /**
