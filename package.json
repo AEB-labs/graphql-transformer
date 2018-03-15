@@ -24,15 +24,15 @@
   "devDependencies": {
     "@types/graphql": "^0.12.4",
     "@types/jasmine": "^2.5.52",
-    "@types/node": "^7.0.22",
-    "dependency-check": "^2.9.1",
+    "@types/node": "^9.4.7",
+    "dependency-check": "^3.1.0",
     "graphql": "^0.13.1",
     "graphql-tag": "^2.8.0",
-    "jasmine": "^2.6.0",
+    "jasmine": "^3.1.0",
     "jasmine-promises": "^0.4.1",
     "jasmine-spec-reporter": "^4.1.0",
     "rimraf": "^2.6.1",
-    "ts-node": "^3.0.4",
+    "ts-node": "^5.0.1",
     "typescript": "^2.4.2"
   },
   "peerDependencies": {
