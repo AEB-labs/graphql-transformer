@@ -1,8 +1,6 @@
 # graphql-transformer
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/AEB-labs/graphql-transformer.svg)](https://greenkeeper.io/)
-
-[![npm version](https://badge.fury.io/js/graphql-transformer.svg)](https://npmjs.org/graphql-transformer) [![Build Status](https://travis-ci.org/AEB-labs/graphql-transformer.svg?branch=master)](https://travis-ci.org/AEB-labs/graphql-transformer)
+[![npm version](https://badge.fury.io/js/graphql-transformer.svg)](https://npmjs.org/graphql-transformer) [![Build Status](https://travis-ci.org/AEB-labs/graphql-transformer.svg?branch=master)](https://travis-ci.org/AEB-labs/graphql-transformer) [![Greenkeeper badge](https://badges.greenkeeper.io/AEB-labs/graphql-transformer.svg)](https://greenkeeper.io/)
 
 A tool to transform GraphQL schemas via simple functions
 
