@@ -6,11 +6,11 @@ import {
     GraphQLObjectTypeConfig, GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig, GraphQLSchema, GraphQLType,
     GraphQLTypeResolver, GraphQLUnionType, GraphQLUnionTypeConfig
 } from 'graphql';
-import { isNativeDirective, isNativeGraphQLType } from './native-symbols';
 import { GraphQLDirectiveConfig } from 'graphql/type/directives';
-import { bindNullable, compact, objectValues } from './utils';
+import { isNativeDirective, isNativeGraphQLType } from './native-symbols';
+import { filterUsableInterfaceImplementations } from './remove-unused-types';
 import { orderTypesTopologically } from './schema-utils';
-import { filterUsableInterfaceImplementations, removeUnusedTypesFromSchema } from './remove-unused-types';
+import { bindNullable, compact, objectValues } from './utils';
 
 export type TransformationFunction<TConfig, TContext extends SchemaTransformationContext>
     = (config: TConfig, context: TContext) => TConfig;
@@ -515,20 +515,31 @@ class Transformer {
         return new GraphQLDirective(config);
     }
 
-    private transformTypeResolver(typeResolver: GraphQLTypeResolver<any, any>, transformer: SchemaTransformer) {
-        if (!typeResolver) {
+    private transformTypeResolver(typeResolver: GraphQLTypeResolver<any, any>|null|undefined, transformer: SchemaTransformer): GraphQLTypeResolver<any, any>|null|undefined {
+        if (typeResolver == undefined) {
             return typeResolver;
         }
 
         return (value: any, context: any, info: GraphQLResolveInfo) => {
             const result = typeResolver(value, context, info);
+            if (result == undefined) {
+                return result;
+            }
             if (typeof result == 'string') {
-                return <GraphQLObjectType>this.findType(result);
+                return this.findType(result) as GraphQLObjectType;
             }
             if (result instanceof GraphQLObjectType) {
                 return this.mapType(result);
             }
-            return result.then(r => typeof r == 'string' ? <GraphQLObjectType>this.findType(r) : this.mapType(r));
+            return result.then(r => {
+                if (r == undefined) {
+                    return r;
+                }
+                if (typeof r == 'string') {
+                    return this.findType(r) as GraphQLObjectType;
+                }
+                return this.mapType(r) as GraphQLObjectType;
+            });
         };
     }
 }
