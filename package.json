@@ -5,8 +5,9 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "rimraf dist && tsc && dependency-check ./package.json",
-    "prepublish": "npm run build",
-    "test": "node graphql-transformer-test.js"
+    "prepublishOnly": "npm run build",
+    "typecheck": "tsc --noEmit --skipLibCheck",
+    "test": "npm run typecheck && node graphql-transformer-test.js"
   },
   "repository": {
     "type": "git",
@@ -22,7 +23,7 @@
   },
   "homepage": "https://github.com/AEB-labs/graphql-transformer#readme",
   "devDependencies": {
-    "@types/graphql": "^0.12.4",
+    "@types/graphql": "^0.13.1",
     "@types/jasmine": "^2.5.52",
     "@types/node": "^9.4.7",
     "dependency-check": "^3.1.0",

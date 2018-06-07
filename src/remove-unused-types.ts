@@ -10,7 +10,7 @@ export function removeUnusedTypesFromSchema(schema: GraphQLSchema): GraphQLSchem
         query: schema.getQueryType(),
         mutation: schema.getMutationType() || undefined,
         subscription: schema.getSubscriptionType() || undefined,
-        directives: schema.getDirectives(),
+        directives: Array.from(schema.getDirectives()), // @types/graphql messed up - input requires [], but getDirectives() gets a ReadonlyArray.
         types: filterUsableInterfaceImplementations(objectTypes, rootTypes)
     });
 }
