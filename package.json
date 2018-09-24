@@ -23,21 +23,21 @@
   },
   "homepage": "https://github.com/AEB-labs/graphql-transformer#readme",
   "devDependencies": {
-    "@types/graphql": "^0.13.1",
+    "@types/graphql": "^14.0.0",
     "@types/jasmine": "^2.5.52",
     "@types/node": "^9.4.7",
     "dependency-check": "^3.1.0",
-    "graphql": "^0.13.1",
-    "graphql-tag": "^2.8.0",
+    "graphql": "^14.0.2",
+    "graphql-tag": "^2.9.2",
     "jasmine": "^3.1.0",
     "jasmine-promises": "^0.4.1",
     "jasmine-spec-reporter": "^4.1.0",
-    "rimraf": "^2.6.1",
-    "ts-node": "^5.0.1",
-    "typescript": "^2.4.2"
+    "rimraf": "^2.6.2",
+    "ts-node": "^7.0.1",
+    "typescript": "^3.0.3"
   },
   "peerDependencies": {
-    "@types/graphql": "~0.10.4 || ~0.11.0 || ~0.12.0 || ~0.13.0",
-    "graphql": "~0.10.4 || ~0.11.0 || ~0.12.0 || ~0.13.0"
+    "@types/graphql": "^14.0.0",
+    "graphql": "^14.0.0"
   }
 }

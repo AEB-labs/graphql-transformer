@@ -71,10 +71,10 @@ describe('schema-transformer', () => {
             }
         });
 
-        expect(walkFields(newSchema.getQueryType(), ['field1', 'scalar'])).toBeDefined('type1.scalar is missing');
-        expect(walkFields(newSchema.getQueryType(), ['field2', 'scalar'])).toBeDefined('type2.scalar is missing');
-        expect(walkFields(newSchema.getQueryType(), ['field1', 'clone'])).toBeUndefined('type2.clone should not be there');
-        expect(walkFields(newSchema.getQueryType(), ['field2', 'clone'])).toBeDefined('type2.clone is missing');
+        expect(walkFields(newSchema.getQueryType()!, ['field1', 'scalar'])).toBeDefined('type1.scalar is missing');
+        expect(walkFields(newSchema.getQueryType()!, ['field2', 'scalar'])).toBeDefined('type2.scalar is missing');
+        expect(walkFields(newSchema.getQueryType()!, ['field1', 'clone'])).toBeUndefined('type2.clone should not be there');
+        expect(walkFields(newSchema.getQueryType()!, ['field2', 'clone'])).toBeDefined('type2.clone is missing');
     });
 
     it('supports union types', () => {
@@ -111,7 +111,7 @@ describe('schema-transformer', () => {
                 };
             }
         });
-        const unionType = newSchema.getQueryType().getFields()['union_'].type;
+        const unionType = newSchema.getQueryType()!.getFields()['union_'].type;
         expect(unionType instanceof GraphQLUnionType).toBeTruthy();
         expect((unionType as GraphQLUnionType).getTypes().length).toBe(2);
     });
@@ -183,7 +183,7 @@ describe('schema-transformer', () => {
             }
         });
 
-        const myTypeRes = transformedSchema.getQueryType().getFields()['myField'].type as GraphQLObjectType;
+        const myTypeRes = transformedSchema.getQueryType()!.getFields()['myField'].type as GraphQLObjectType;
         expect(myTypeRes).toBeDefined();
         expect(myTypeRes.getFields()['nameButCooler']).toBeDefined();
         expect(myTypeRes.getFields()['self']).toBeDefined();

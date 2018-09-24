@@ -179,7 +179,7 @@ describe('remove-unused-types', () => {
 
         const condensedSchema = removeUnusedTypesFromSchema(schema);
         expect(condensedSchema.getDirective('dir')).toBeDefined('@dir');
-        const type = condensedSchema.getDirective('dir').args[0].type;
+        const type = condensedSchema.getDirective('dir')!.args[0].type;
         expect(type).toBeDefined('@dir.arg[[type]]');
         expect(condensedSchema.getTypeMap()['DirInput']).toBeDefined('DirInput');
     });
