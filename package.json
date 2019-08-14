@@ -35,7 +35,7 @@
     "jasmine": "^3.1.0",
     "jasmine-promises": "^0.4.1",
     "jasmine-spec-reporter": "^4.1.0",
-    "rimraf": "^2.6.2",
+    "rimraf": "^3.0.0",
     "ts-node": "^7.0.1",
     "typescript": "^3.0.3"
   },
