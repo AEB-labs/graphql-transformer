@@ -1,10 +1,11 @@
 import {
+    GraphQLAbstractType,
     GraphQLArgument, GraphQLDirective, GraphQLEnumType, GraphQLEnumTypeConfig, GraphQLEnumValueConfigMap, GraphQLField,
     GraphQLFieldConfig, GraphQLFieldConfigArgumentMap, GraphQLFieldConfigMap, GraphQLFieldMap, GraphQLInputField,
     GraphQLInputFieldConfig, GraphQLInputFieldConfigMap, GraphQLInputObjectType, GraphQLInputObjectTypeConfig,
     GraphQLInterfaceType, GraphQLInterfaceTypeConfig, GraphQLList, GraphQLNamedType, GraphQLNonNull, GraphQLObjectType,
     GraphQLObjectTypeConfig, GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig, GraphQLSchema, GraphQLType,
-    GraphQLTypeResolver, GraphQLUnionType, GraphQLUnionTypeConfig
+    GraphQLTypeResolver, GraphQLUnionType, GraphQLUnionTypeConfig, isListType, isNonNullType
 } from 'graphql';
 import { GraphQLDirectiveConfig } from 'graphql/type/directives';
 import { isNativeDirective, isNativeGraphQLType } from './native-symbols';
@@ -253,10 +254,10 @@ class Transformer {
      * Maps a type in the old schema to a type in the new schema, supporting list and optional types.
      */
     private mapType<T extends GraphQLType>(type: T): T {
-        if (type instanceof GraphQLList) {
+        if (isListType(type)) {
             return <T>new GraphQLList(this.mapType(type.ofType));
         }
-        if (type instanceof GraphQLNonNull) {
+        if (isNonNullType(type)) {
             return <T>new GraphQLNonNull(this.mapType(type.ofType));
         }
         const namedType = <GraphQLNamedType>type; // generics seem to throw off type guard logic
@@ -520,8 +521,8 @@ class Transformer {
             return typeResolver;
         }
 
-        return (value: any, context: any, info: GraphQLResolveInfo) => {
-            const result = typeResolver(value, context, info);
+        return (...args) => {
+            const result = typeResolver(...args);
             if (result == undefined) {
                 return result;
             }
