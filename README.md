@@ -1,6 +1,6 @@
 # graphql-transformer
 
-[![npm version](https://badge.fury.io/js/graphql-transformer.svg)](https://npmjs.org/graphql-transformer) [![Build Status](https://github.com/AEB-labs/graphql-transformer/workflows/nodejs/badge.svg
+[![npm version](https://badge.fury.io/js/graphql-transformer.svg)](https://npmjs.org/graphql-transformer) [![Build Status](https://github.com/AEB-labs/graphql-transformer/workflows/Node%20CI/badge.svg
 )](https://travis-ci.org/AEB-labs/graphql-transformer)
 
 A tool to transform GraphQL schemas via simple functions
