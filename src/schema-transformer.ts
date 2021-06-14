@@ -273,7 +273,7 @@ class Transformer {
             mapType: this.mapType.bind(this),
             findType: this.findType.bind(this),
             oldSchema: this.schema,
-            copyType: this.copyType.bind(this)
+            copyType: this.copyType.bind(this) as any // todo fix any
         };
     }
 
