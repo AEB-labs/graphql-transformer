@@ -1,6 +1,6 @@
 {
   "name": "graphql-transformer",
-  "version": "0.2.1",
+  "version": "0.3.0-alpha.1",
   "description": "transform GraphQL schemas with simple mapping functions",
   "main": "dist/index.js",
   "scripts": {
