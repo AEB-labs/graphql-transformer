@@ -273,7 +273,7 @@ class Transformer {
             mapType: this.mapType.bind(this),
             findType: this.findType.bind(this),
             oldSchema: this.schema,
-            copyType: this.copyType.bind(this) as any // todo fix any
+            copyType: this.copyType.bind(this)
         };
     }
 
@@ -292,29 +292,29 @@ class Transformer {
     /**
      * Creates a new type for the given old type. Interfaces are expected to be already present; fields are resolved lazily
      */
-    private transformType<T extends GraphQLType>(type: T) {
+    private transformType<T extends GraphQLType>(type: T): T {
         return this.copyType(type, this.transformers);
     }
 
 
-    private copyType<T extends GraphQLType>(type: T, transformer: SchemaTransformer) {
+    private copyType<T extends GraphQLType>(type: T, transformer: SchemaTransformer): T {
         if (type instanceof GraphQLScalarType) {
-            return this.transformScalarType(type, transformer);
+            return this.transformScalarType(type, transformer) as T;
         }
         if (type instanceof GraphQLObjectType) {
-            return this.transformObjectType(type, transformer);
+            return this.transformObjectType(type, transformer) as T;
         }
         if (type instanceof GraphQLInputObjectType) {
-            return this.transformInputObjectType(type, transformer);
+            return this.transformInputObjectType(type, transformer) as T;
         }
         if (type instanceof GraphQLInterfaceType) {
-            return this.transformInterfaceType(type, transformer);
+            return this.transformInterfaceType(type, transformer) as T;
         }
         if (type instanceof GraphQLUnionType) {
-            return this.transformUnionType(type, transformer);
+            return this.transformUnionType(type, transformer) as T;
         }
         if (type instanceof GraphQLEnumType) {
-            return this.transformEnumType(type, transformer);
+            return this.transformEnumType(type, transformer) as T;
         }
         throw new Error(`Unsupported type: ${type}`);
     }
