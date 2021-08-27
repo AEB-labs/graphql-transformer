@@ -418,6 +418,8 @@ class Transformer {
                 description: arg.description,
                 type: this.mapType(arg.type),
                 defaultValue: arg.defaultValue,
+                deprecationReason: arg.deprecationReason,
+                extensions: arg.extensions,
                 astNode: arg.astNode
             };
         }
@@ -435,6 +437,8 @@ class Transformer {
                     description: originalField.description,
                     defaultValue: originalField.defaultValue,
                     type: this.mapType(originalField.type),
+                    deprecationReason: originalField.deprecationReason,
+                    extensions: originalField.extensions,
                     astNode: originalField.astNode
                 };
                 if (transformer.transformInputField) {
