@@ -437,6 +437,8 @@ class Transformer {
                     description: originalField.description,
                     defaultValue: originalField.defaultValue,
                     type: this.mapType(originalField.type),
+                    deprecationReason: originalField.deprecationReason,
+                    extensions: originalField.extensions,
                     astNode: originalField.astNode
                 };
                 if (transformer.transformInputField) {
