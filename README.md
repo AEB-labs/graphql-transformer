@@ -1,3 +1,6 @@
+# NO LONGER MAINTAINED
+We no longer us this library at AEB, so unfortunately, we are not able to maintain it properly. The repository is therefor archived.
+
 # graphql-transformer
 
 [![npm version](https://badge.fury.io/js/graphql-transformer.svg)](https://npmjs.org/graphql-transformer) [![Build Status](https://github.com/AEB-labs/graphql-transformer/workflows/Node%20CI/badge.svg
